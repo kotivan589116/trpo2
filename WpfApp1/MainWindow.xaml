@@ -1,0 +1,341 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+        mc:Ignorable="d"
+        Title="Газировка" WindowState="Maximized">
+    <Grid x:Name="SceneRoot" ClipToBounds="True" SizeChanged="OnSceneRootSizeChanged" Cursor="">
+        <Image Source="/Image/bg.jpg"
+           Stretch="UniformToFill"
+           HorizontalAlignment="Stretch"
+           VerticalAlignment="Stretch"/>
+        <Rectangle Fill="Black" Opacity="0.7"/>
+        <Canvas x:Name="MachineCanvas"
+                Width="396" Height="938"
+                HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Canvas.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform x:Name="MachineScale" ScaleX="1" ScaleY="1"/>
+                    <TranslateTransform x:Name="MachineTranslate"/>
+                </TransformGroup>
+            </Canvas.RenderTransform>
+
+            <Canvas.Resources>
+                <Style x:Key="ShadowButtonStyle" TargetType="Border">
+                    <Setter Property="Width" Value="19"/>
+                    <Setter Property="Height" Value="19"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </Canvas.Resources>
+
+            <!-- Фон автомата -->
+            <svgc:SvgViewbox Width="396" Height="938"
+                             Source="/Image/avtomat.svg"
+                             Stretch="Fill"/>
+
+            <!-- Окно сдачи: клик забирает монеты обратно в стопки -->
+            <Border x:Name="ChangeTray"
+                    Canvas.Left="301" Canvas.Top="403"
+                    Width="55" Height="40"
+                    Background="Transparent"
+                    Cursor="Arrow"
+                    MouseLeftButtonUp="OnChangeTrayClick"/>
+
+            <StackPanel Canvas.Left="0" Canvas.Top="56"
+                        Width="396"
+                        HorizontalAlignment="Center"
+                        IsHitTestVisible="False">
+                <TextBlock Text="Газированная"
+                           FontFamily="/Fonts/#Pacifico"
+                           FontSize="35"
+                           LineHeight="61.6"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Foreground="#BC3737"/>
+                <TextBlock Text="ВОДА"
+                           FontFamily="/Fonts/#Inter"
+                           FontWeight="Black"
+                           FontStyle="Normal"
+                           FontSize="64"
+                           LineHeight="64"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Foreground="#BC3737"/>
+            </StackPanel>
+
+            <!-- Кнопка возврата -->
+            <Border x:Name="ReturnButton"
+                    Style="{StaticResource ShadowButtonStyle}"
+                    Canvas.Right="52" Canvas.Top="359"
+                    ToolTip="Вернуть монеты"
+                    MouseLeftButtonUp="OnReturnClick">
+                <svgc:SvgViewbox Source="/Image/btn.svg" Stretch="Fill"/>
+            </Border>
+
+            <!-- Плашки на панели: БУРАТИНО -->
+            <Grid Width="57" Height="47" Canvas.Right="142" Canvas.Top="295">
+                <svgc:SvgViewbox x:Name="PlateBuratino" Source="/Image/tablo.svg" Stretch="Fill"/>
+                <svgc:SvgViewbox x:Name="PlateBuratinoLit" Source="/Image/tablo-a.svg" Stretch="Fill"
+                                 Visibility="Collapsed"/>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" IsHitTestVisible="False">
+                    <TextBlock Text="СИРОП&#10;БУРАТИНО"
+                               FontFamily="/Fonts/#Inter"
+                               FontWeight="SemiBold"
+                               FontSize="8"
+                               LineHeight="8"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Opacity="0.7"
+                               Foreground="#000000"/>
+                    <TextBlock Text="3 коп"
+                               FontFamily="/Fonts/#Inter"
+                               FontWeight="SemiBold"
+                               FontSize="8"
+                               LineHeight="8"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Opacity="0.7"
+                               Foreground="#000000"
+                               Margin="0,2,0,0"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Плашки на панели: ТАРХУН -->
+            <Grid Width="57" Height="47" Canvas.Right="210" Canvas.Top="295">
+                <svgc:SvgViewbox x:Name="PlateTarhun" Source="/Image/tablo.svg" Stretch="Fill"/>
+                <svgc:SvgViewbox x:Name="PlateTarhunLit" Source="/Image/tablo-a.svg" Stretch="Fill"
+                                 Visibility="Collapsed"/>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" IsHitTestVisible="False">
+                    <TextBlock Text="СИРОП&#10;ТАРХУН"
+                               FontFamily="/Fonts/#Inter"
+                               FontWeight="SemiBold"
+                               FontSize="8"
+                               LineHeight="8"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Opacity="0.7"
+                               Foreground="#000000"/>
+                    <TextBlock Text="3 коп"
+                               FontFamily="/Fonts/#Inter"
+                               FontWeight="SemiBold"
+                               FontSize="8"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Opacity="0.7"
+                               Foreground="#000000"
+                               Margin="0,2,0,0"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Плашки на панели: БЕЗ СИРОПА -->
+            <Grid Width="57" Height="47" Canvas.Right="275" Canvas.Top="295">
+                <svgc:SvgViewbox x:Name="PlateNoSyrup" Source="/Image/tablo.svg" Stretch="Fill"/>
+                <svgc:SvgViewbox x:Name="PlateNoSyrupLit" Source="/Image/tablo-a.svg" Stretch="Fill"
+                                 Visibility="Collapsed"/>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" IsHitTestVisible="False">
+                    <TextBlock Text="БЕЗ&#10;СИРОПА"
+                               FontFamily="/Fonts/#Inter"
+                               FontWeight="SemiBold"
+                               FontSize="8"
+                               LineHeight="8"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Opacity="0.7"
+                               Foreground="#000000"/>
+                    <TextBlock Text="1 коп"
+                               FontFamily="/Fonts/#Inter"
+                               FontWeight="SemiBold"
+                               FontSize="8"
+                               LineHeight="8"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Opacity="0.7"
+                               Foreground="#000000"
+                               Margin="0,2,0,0"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Кнопки на панели -->
+            <Border x:Name="BtnBuratino"
+                    Style="{StaticResource ShadowButtonStyle}"
+                    Opacity="0.55"
+                    Canvas.Right="160" Canvas.Top="359"
+                    MouseLeftButtonUp="OnDrinkClick">
+                <svgc:SvgViewbox Source="/Image/btn.svg" Stretch="Fill"/>
+            </Border>
+            <Border x:Name="BtnTarhun"
+                    Style="{StaticResource ShadowButtonStyle}"
+                    Opacity="0.55"
+                    Canvas.Right="227" Canvas.Top="359"
+                    MouseLeftButtonUp="OnDrinkClick">
+                <svgc:SvgViewbox Source="/Image/btn.svg" Stretch="Fill"/>
+            </Border>
+            <Border x:Name="BtnNoSyrup"
+                    Style="{StaticResource ShadowButtonStyle}"
+                    Opacity="0.55"
+                    Canvas.Right="295" Canvas.Top="359"
+                    MouseLeftButtonUp="OnDrinkClick">
+                <svgc:SvgViewbox Source="/Image/btn.svg" Stretch="Fill"/>
+            </Border>
+
+            <!-- Струя напитка -->
+            <Rectangle x:Name="PourStream"
+                       Canvas.Left="148.5" Canvas.Top="459"
+                       Width="5" Height="26"
+                       RadiusX="2.5" RadiusY="2.5"
+                       Fill="#F2A52E"
+                       Visibility="Collapsed"
+                       RenderTransformOrigin="0.5,0"
+                       IsHitTestVisible="False">
+                <Rectangle.RenderTransform>
+                    <ScaleTransform x:Name="PourStreamScale" ScaleY="1"/>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+
+            <!-- Фонтан промывки: бьёт снизу вверх в перевёрнутый стакан -->
+            <Canvas x:Name="RinseFountain"
+                    Canvas.Left="218" Canvas.Top="500"
+                    Width="66" Height="72"
+                    Visibility="Collapsed"
+                    IsHitTestVisible="False">
+                <Rectangle x:Name="RinseMainJet"
+                           Canvas.Left="30" Canvas.Top="0"
+                           Width="6" Height="72"
+                           RadiusX="3" RadiusY="3"
+                           Fill="#8ADBF7"
+                           RenderTransformOrigin="0.5,1">
+                    <Rectangle.RenderTransform>
+                        <ScaleTransform x:Name="RinseMainJetScale" ScaleY="1"/>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="RinseLeftJet"
+                           Canvas.Left="14" Canvas.Top="20"
+                           Width="4" Height="52"
+                           RadiusX="2" RadiusY="2"
+                           Fill="#BBEEFB"
+                           Opacity="0.9"
+                           RenderTransformOrigin="0.5,1">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="-16"/>
+                            <ScaleTransform x:Name="RinseLeftJetScale" ScaleY="1"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="RinseRightJet"
+                           Canvas.Left="48" Canvas.Top="20"
+                           Width="4" Height="52"
+                           RadiusX="2" RadiusY="2"
+                           Fill="#BBEEFB"
+                           Opacity="0.9"
+                           RenderTransformOrigin="0.5,1">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="16"/>
+                            <ScaleTransform x:Name="RinseRightJetScale" ScaleY="1"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Ellipse x:Name="RinseSource"
+                         Canvas.Left="25" Canvas.Top="62"
+                         Width="16" Height="10"
+                         Fill="#BDEBF8"
+                         Opacity="0.85"/>
+            </Canvas>
+
+            <!-- Стакан: жидкость + стекло. -->
+            <Grid x:Name="GlassGroup"
+                  Canvas.Left="127" Canvas.Top="481"
+                  Width="48" Height="87"
+                  Background="Transparent"
+                  Cursor="Arrow"
+                  RenderTransformOrigin="0.5,0.5"
+                  MouseLeftButtonUp="OnGlassClick">
+                <Grid.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform x:Name="GlassRotate" Angle="0"/>
+                        <ScaleTransform x:Name="GlassScale" ScaleX="1" ScaleY="1"/>
+                        <TranslateTransform x:Name="GlassTranslate"/>
+                    </TransformGroup>
+                </Grid.RenderTransform>
+
+                <!-- Жидкость (рисуется под стеклом) -->
+                <Canvas Width="48" Height="87" IsHitTestVisible="False">
+                    <Canvas.Clip>
+                        <PathGeometry Figures="M4,8 L8,79 C10,84 16,86 24,86 C32,86 38,84 40,79 L44,8 Z"/>
+                    </Canvas.Clip>
+                    <Rectangle x:Name="LiquidRect"
+                               Width="48" Height="87"
+                               Fill="#C5E7F5"
+                               RenderTransformOrigin="0.5,1">
+                        <Rectangle.RenderTransform>
+                            <ScaleTransform x:Name="LiquidScale" ScaleX="1" ScaleY="0"/>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                    <Rectangle x:Name="RinseTint"
+                               Width="48" Height="87"
+                               Fill="#8FD4F0"
+                               Opacity="0"/>
+                </Canvas>
+
+                <svgc:SvgViewbox Width="48" Height="87"
+                                 Source="/Image/glass.svg"
+                                 Stretch="Fill"
+                                 IsHitTestVisible="False"/>
+            </Grid>
+        </Canvas>
+
+       
+        <Canvas x:Name="CoinLayer"
+                Width="396" Height="938"
+                HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid x:Name="CoinOne"
+                  Canvas.Left="450" Canvas.Top="290"
+                  Width="48" Height="48"
+                  Background="Transparent"
+                  Cursor="Hand"
+                  RenderTransformOrigin="0.5,0.5"
+                  ToolTip="1 копейка"
+                  MouseLeftButtonUp="OnCoinOneClick">
+                <Grid.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform x:Name="CoinOneDockScale" ScaleX="1" ScaleY="1"/>
+                        <TranslateTransform x:Name="CoinOneMove"/>
+                    </TransformGroup>
+                </Grid.RenderTransform>
+                <svgc:SvgViewbox Source="/Image/m1.svg" Stretch="Fill"
+                                 RenderTransformOrigin="0.5,0.5">
+                    <svgc:SvgViewbox.RenderTransform>
+                        <ScaleTransform x:Name="CoinOneScale" ScaleX="1" ScaleY="1"/>
+                    </svgc:SvgViewbox.RenderTransform>
+                </svgc:SvgViewbox>
+            </Grid>
+
+            <Grid x:Name="CoinTwo"
+                  Canvas.Left="510" Canvas.Top="290"
+                  Width="48" Height="48"
+                  Background="Transparent"
+                  Cursor="Hand"
+                  RenderTransformOrigin="0.5,0.5"
+                  ToolTip="3 копейки"
+                  MouseLeftButtonUp="OnCoinTwoClick">
+                <Grid.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform x:Name="CoinTwoDockScale" ScaleX="1" ScaleY="1"/>
+                        <TranslateTransform x:Name="CoinTwoMove"/>
+                    </TransformGroup>
+                </Grid.RenderTransform>
+                <svgc:SvgViewbox Source="/Image/m2.svg" Stretch="Fill"
+                                 RenderTransformOrigin="0.5,0.5">
+                    <svgc:SvgViewbox.RenderTransform>
+                        <ScaleTransform x:Name="CoinTwoScale" ScaleX="1" ScaleY="1"/>
+                    </svgc:SvgViewbox.RenderTransform>
+                </svgc:SvgViewbox>
+            </Grid>
+        </Canvas>
+    </Grid>
+</Window>
